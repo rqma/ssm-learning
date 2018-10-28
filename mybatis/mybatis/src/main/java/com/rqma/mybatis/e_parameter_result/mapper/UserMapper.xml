@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rqma.mybatis.e_parameter_result.mapper.UserMapper">
+
+    <select id="findUserList" parameterType="com.rqma.mybatis.e_parameter_result.po.UserQueryVo" resultType="com.rqma.mybatis.e_parameter_result.po.UserCustom">
+        SELECT * FROM user WHERE user.sex=#{userCustom.sex} and user.username like '%${userCustom.username}%'
+    </select>
+
+    <select id="findUserCount" parameterType="com.rqma.mybatis.e_parameter_result.po.UserQueryVo" resultType="int">
+        SELECT count(*) FROM user
+    </select>
+
+    <!-- 定义resultMap
+   将SELECT id id_,username username_ FROM USER 和User类中的属性作一个映射关系
+
+   type：resultMap最终映射的java对象类型,可以使用别名
+   id：对resultMap的唯一标识
+    -->
+    <resultMap id="userResultMap" type="com.rqma.mybatis.e_parameter_result.po.User">
+        <!-- id表示查询结果集中唯一标识
+       column：查询出来的列名
+       property：type指定的pojo类型中的属性名
+       最终resultMap对column和property作一个映射关系 （对应关系）
+       -->
+        <id column="id_" property="id"/>
+        <!--
+       result：对普通名映射定义
+       column：查询出来的列名
+       property：type指定的pojo类型中的属性名
+       最终resultMap对column和property作一个映射关系 （对应关系）
+        -->
+        <result column="username_" property="username"/>
+    </resultMap>
+
+    <select id="findUserByIdResultMap" parameterType="int" resultMap="userResultMap">
+        SELECT id id_,username username_ FROM user WHERE id=#{value}
+    </select>
+</mapper>
